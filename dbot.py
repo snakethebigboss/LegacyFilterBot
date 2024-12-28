@@ -224,6 +224,14 @@ async def endorse(ctx, username: str):
 
         await ctx.send(f"{username} has been promoted to Regular!")
 
+    # If Endorsement is 5 and they do not have guest role, remove them from the database
+    if endorse >= 5:
+        guest_role = discord.utils.get(ctx.guild.roles, name=GUEST_ROLE)
+        if guest_role not in target_member.roles:
+            c.execute("DELETE FROM members WHERE user_id = ?", (target_member.id,))
+            conn.commit()
+            print(f"Removed {username} from the database for already being accepted into community.")
+
 # Command to manually add a user to the database
 @bot.command(name="adduser")
 async def adduser(ctx, username: str):
