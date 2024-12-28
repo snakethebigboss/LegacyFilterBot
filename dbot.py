@@ -284,6 +284,15 @@ async def daily_check():
                     c.execute("DELETE FROM members WHERE user_id = ?", (user_id,))
                     print(f"Removed {member.name} from the database for already being accepted into community.")
 
+    #Check if the user is no longer in the server and remove them from the database
+    c.execute("SELECT user_id FROM members")
+    members = c.fetchall()
+    for user_id in members:
+        member = guild.get_member(user_id[0])
+        if not member:
+            c.execute("DELETE FROM members WHERE user_id = ?", (user_id[0],))
+            print(f"Removed {user_id[0]} from the database for no longer being in the server.")
+
     conn.commit()
     print(f"Daily check completed at {now}.")
     await channel.send(f"Daily check completed at {now}.")
