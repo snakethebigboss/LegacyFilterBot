@@ -1,0 +1,6 @@
+.env
+*.sql
+*.log
+*.sqlite
+*.db
+*.pyc
