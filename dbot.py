@@ -259,7 +259,7 @@ async def showcommands(ctx):
         "!show: Show all members in the database\n"
         "!stats <username>: Show stats of a user\n"
         "!setdaykick <username> <daykick>: Set DAYKICK of a user\n"
-        "!endorse <username>: Endorse a user"
+        "!endorse <username>: Endorse a user\n"
         "!adduser <username>: Add a user to the database"
     )
 
