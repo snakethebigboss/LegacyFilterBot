@@ -115,12 +115,15 @@ async def show(ctx):
 
     c.execute("SELECT * FROM members")
     records = c.fetchall()
+    message = ""
     for record in records:
         user_id = record[0]
         daykick = record[1]
         endorse = record[2]
         user = await bot.fetch_user(user_id)
-        await ctx.send(f"Username: {user.name}, DAYKICK: {daykick}, ENDORSE: {endorse}")
+        message += f"Username: {user.name}, Days: {daykick}, Endorsements: {endorse}\n"
+
+    await ctx.send(message)
 
 # command to show statistics of a user
 @bot.command(name="stats")
@@ -295,7 +298,8 @@ async def showcommands(ctx):
         "!stats <username>: Show stats of a user\n"
         "!setdaykick <username> <daykick>: Set DAYKICK of a user\n"
         "!endorse <username>: Endorse a user\n"
-        "!adduser <username>: Add a user to the database"
+        "!adduser <username>: Add a user to the database\n"
+        "!removeuser <username>: Remove a user from the database"
     )
 
 
