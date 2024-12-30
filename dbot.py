@@ -116,7 +116,11 @@ async def show(ctx):
     c.execute("SELECT * FROM members")
     records = c.fetchall()
     for record in records:
-        await ctx.send(record)
+        user_id = record[0]
+        daykick = record[1]
+        endorse = record[2]
+        user = await bot.fetch_user(user_id)
+        await ctx.send(f"Username: {user.name}, DAYKICK: {daykick}, ENDORSE: {endorse}")
 
 # command to show statistics of a user
 @bot.command(name="stats")
@@ -257,6 +261,29 @@ async def adduser(ctx, username: str):
     await ctx.send(f"Added {username} to the database.")
     print(f"Added {username} to the database.")
 
+# Command to manually remove a user from the database
+@bot.command(name="removeuser")
+async def removeuser(ctx, username: str):
+    if not ctx.channel.name == "endorsements":
+        await ctx.send("This command cannot be used here.")
+        return
+
+    #Check if they are either an officer or founder
+    if discord.utils.get(ctx.author.roles, name=OFFICER_ROLE) or discord.utils.get(ctx.author.roles, name=FOUNDER_ROLE):
+        pass
+    else:
+        await ctx.send("You do not have permission to use this command.")
+        return
+
+    target_member = discord.utils.get(ctx.guild.members, name=username)
+    if not target_member:
+        await ctx.send(f"User {username} not found.")
+        return
+
+    c.execute("DELETE FROM members WHERE user_id = ?", (target_member.id,))
+    conn.commit()
+    await ctx.send(f"Removed {username} from the database.")
+    print(f"Removed {username} from the database.")
 
 # Command to show all commands
 @bot.command(name="showcommands")
